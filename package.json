@@ -1,0 +1,11 @@
+{
+  "name": "demo-fullstack",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "semantic-release": "^23.0.0"
+  },
+  "release": {
+    "branches": ["main"]
+  }
+}

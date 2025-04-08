@@ -1,0 +1,45 @@
+name: Deploy com Versionamento
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-e-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar dependências do semantic-release
+        run: npm install
+
+      - name: Executar semantic-release (versão + tag)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      - name: Configurar SSH para rsync
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan IP_SERVIDOR1 >> ~/.ssh/known_hosts
+          ssh-keyscan IP_SERVIDOR2 >> ~/.ssh/known_hosts
+          ssh-keyscan IP_SERVIDOR3 >> ~/.ssh/known_hosts
+
+      - name: Deploy para Servidor 1
+        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR1:/caminho/system/
+
+      - name: Deploy para Servidor 2
+        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR2:/caminho/system/
+
+      - name: Deploy para Servidor 3
+        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR3:/caminho/system/
