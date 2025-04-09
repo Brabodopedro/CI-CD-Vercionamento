@@ -31,15 +31,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan IP_SERVIDOR1 >> ~/.ssh/known_hosts
-          ssh-keyscan IP_SERVIDOR2 >> ~/.ssh/known_hosts
-          ssh-keyscan IP_SERVIDOR3 >> ~/.ssh/known_hosts
+          ssh-keyscan 89.117.33.97 >> ~/.ssh/known_hosts
 
       - name: Deploy para Servidor 1
-        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR1:/caminho/system/
-
-      - name: Deploy para Servidor 2
-        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR2:/caminho/system/
-
-      - name: Deploy para Servidor 3
-        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ user@IP_SERVIDOR3:/caminho/system/
+        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ root@89.117.33.97:/demo-fullstack/
