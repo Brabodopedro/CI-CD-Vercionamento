@@ -35,4 +35,5 @@ jobs:
           ssh-keyscan 89.117.33.97 >> ~/.ssh/known_hosts
 
       - name: Deploy para Servidor 1
-        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ root@89.117.33.97:/demo-fullstack/
+        run: rsync -avz --delete --exclude-from='.deployignore' ./system/ root@89.117.33.97:/root/demo-fullstack/
+
